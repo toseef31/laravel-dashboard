@@ -35,4 +35,9 @@ class Controller extends BaseController
     {
         return rand(100000, 999999);
     }
+    public function cleanString($string) {
+        $cleanedString = preg_replace('/[^A-Za-z0-9_-]/', '', $string);
+        
+        return $cleanedString;
+    }
 }

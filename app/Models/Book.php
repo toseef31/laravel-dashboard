@@ -31,4 +31,29 @@ class Book extends Model
         'cost_price',
         'valuation',
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($book) {
+            // Set the book_id before the book is created
+            $lastBook = self::latest()->first();
+            $nextId = $lastBook ? $lastBook->id + 1 : 1;
+            $book->book_id = 'B' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        });
+    }
+
+    public function bookMedia()
+    {
+        return $this->hasMany(BookMedia::class);
+    }
+
+    public function bookSize()
+    {
+        return $this->belongsTo(BookSize::class, 'size');
+    }
 }

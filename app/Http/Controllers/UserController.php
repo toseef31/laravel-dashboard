@@ -61,4 +61,19 @@ class UserController extends Controller
             return $this->sendError('Failed to delete user', $e->getMessage(), 500);
         }
     }
+
+    public function editUser(Request $request)
+    {
+        try {
+            $user = $request->user();
+            if(!$request->email && !$request->password && !$request->is_two_factor_enabled && !$request->two_factor_secret){
+                $user->update($request->all());
+                return $this->sendResponse('User updated successfully', ['user' => $user], 200);
+            }else{
+                return $this->sendError('Email can not be updated', '', 422);
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to update user', $e->getMessage(), 500);
+        }
+    }
 }

@@ -3,8 +3,118 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Book;
 
 class BookController extends Controller
 {
-    //
+    public function store(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'author' => 'required|string|max:255',
+                'description' => 'required|string',
+                'pages' => 'required|integer|min:0',
+                'size' => 'nullable|integer|min:0',
+                'edition' => 'nullable|string|max:255',
+                'publisher' => 'nullable|string|max:255',
+                'publication_year' => 'nullable|string|max:4',
+                'status' => 'nullable|string|in:for_sale,sold,out_of_stock',
+                'book_condition' => 'nullable|string',
+                'jacket_condition' => 'nullable|string',
+                'comment' => 'nullable|string',
+                'add_date' => 'nullable|string|date_format:Y-m-d',
+                'sold_date' => 'nullable|string|date_format:Y-m-d',
+                'buyer_name' => 'nullable|string|max:255',
+                'buyer_email' => 'nullable|string|email|max:255',
+                'sold_price' => 'nullable|numeric|min:0',
+                'cost_price' => 'nullable|numeric|min:0',
+                'valuation' => 'nullable|string|max:255',
+            ]);
+
+            $book = Book::create($validatedData);
+            return $this->sendResponse('Book Created Successfully', $book, 201);
+
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to create book', $e->getMessage(), 500);
+        }
+    }
+    public function index(Request $request)
+    {
+        try {
+            $perPage = $request->input('per_page', 1);
+            $query = Book::query();
+    
+            if ($request->has('book_id')) {
+                $query->where('book_id', $request->input('book_id'));
+            }
+    
+            if ($request->has('title')) {
+                $query->where('title', 'LIKE', '%' . $request->input('title') . '%');
+            }
+    
+            if ($request->has('publisher')) {
+                $query->where('publisher', 'LIKE', '%' . $request->input('publisher') . '%');
+            }
+    
+            if ($request->has('author')) {
+                $query->where('author', 'LIKE', '%' . $request->input('author') . '%');
+            }
+    
+            if ($request->has('publication_year')) {
+                $query->where('publication_year', $request->input('publication_year'));
+            }
+    
+            if ($request->has('edition')) {
+                $query->where('edition', 'LIKE', '%' . $request->input('edition') . '%');
+            }
+            $query->with('bookMedia', 'bookSize');
+            $books = $query->paginate($perPage);
+            return $this->sendPaginatedResponse($books, 200);
+    
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to fetch books', $e->getMessage(), 500);
+        }
+    }
+    public function deleteBook(Request $request)
+    {
+        try {
+            $book = Book::find($request->id);
+            if($book){
+                $book->delete();
+                return $this->sendResponse('Book deleted successfully', null, 200);
+            }else{
+                return $this->sendError('Book not found', null, 404);
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to delete book', $e->getMessage(), 500);
+        }
+    }
+    public function editBook(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'id' => 'required|integer|min:0',
+            ]);
+    
+            if ($request->has('book_id')) {
+                return $this->sendError('Validation Error, Book ID cannot be edited', null, 422);
+            }
+    
+            $book = Book::find($request->id);
+    
+            if ($book) {
+                $updateData = $request->except('id');
+                $book->update($updateData);
+    
+                return $this->sendResponse('Book updated successfully', $book, 200);
+            } else {
+                return $this->sendError('Book not found', null, 404);
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to update book', $e->getMessage(), 500);
+        }
+    }
+    
 }
