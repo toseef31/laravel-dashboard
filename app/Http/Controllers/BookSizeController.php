@@ -17,7 +17,7 @@ class BookSizeController extends Controller
             $size = BookSize::create($validatedData);
             return $this->sendResponse('Size Created Successfully', $size, 201);
         } catch (\Exception $e) {
-            return $this->sendError('Failed to create user',$e->getMessage(), 500);
+            return $this->sendError('Failed to create size',$e->getMessage(), 500);
         }
     }
 
@@ -56,6 +56,15 @@ class BookSizeController extends Controller
             return $this->sendResponse('Size updated successfully', $size, 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to update size', $e->getMessage(), 500);
+        }
+    }
+    public function show($id)
+    {
+        try {
+            $size = BookSize::find($id);
+            return $this->sendResponse('Size fetched successfully', $size, 200);
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to fetch size', $e->getMessage(), 500);
         }
     }
 }

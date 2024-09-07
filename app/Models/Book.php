@@ -47,6 +47,7 @@ class Book extends Model
         });
     }
 
+
     public function bookMedia()
     {
         return $this->hasMany(BookMedia::class);

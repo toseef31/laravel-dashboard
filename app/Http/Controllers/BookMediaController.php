@@ -62,15 +62,25 @@ class BookMediaController extends Controller
                 return $this->sendError('File not found', 'The file you are trying to delete does not exist.', 404);
             }
     
-            if (Storage::disk('public')->exists($bookMedia->media_path)) {
-                Storage::disk('public')->delete($bookMedia->media_path);
-            }
-    
             $bookMedia->delete();
     
             return $this->sendResponse('File deleted successfully.', [], 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to delete file', $e->getMessage(), 500);
+        }
+    }
+    
+    public function show($id)
+    {
+        try {
+            $bookMedia = BookMedia::where('book_id', $id)->get();
+            $data = [
+                'media' => $bookMedia,
+                'media_path' => '/storage/'
+            ];
+            return $this->sendResponse('File(s) fetched successfully', $data, 200);
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to fetch file', $e->getMessage(), 500);
         }
     }
     

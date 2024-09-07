@@ -19,7 +19,7 @@ class BookController extends Controller
                 'edition' => 'nullable|string|max:255',
                 'publisher' => 'nullable|string|max:255',
                 'publication_year' => 'nullable|string|max:4',
-                'status' => 'nullable|string|in:for_sale,sold,out_of_stock',
+                'status' => 'nullable|string|in:for_sale,sold,out_of_stock,not_selected',
                 'book_condition' => 'nullable|string',
                 'jacket_condition' => 'nullable|string',
                 'comment' => 'nullable|string',
@@ -42,8 +42,9 @@ class BookController extends Controller
     public function index(Request $request)
     {
         try {
-            $perPage = $request->input('per_page', 1);
+            $perPage = $request->input('per_page', 25);
             $query = Book::query();
+            $query->orderBy('id', 'desc');
     
             if ($request->has('book_id')) {
                 $query->where('book_id', $request->input('book_id'));
@@ -114,6 +115,45 @@ class BookController extends Controller
             }
         } catch (\Exception $e) {
             return $this->sendError('Failed to update book', $e->getMessage(), 500);
+        }
+    }
+    public function show(Request $request){
+        try {
+            $book = Book::find($request->id);
+            if($book){
+                return $this->sendResponse('Book fetched successfully', $book, 200);
+            }else{
+                return $this->sendError('Book not found', null, 404);
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to fetch book', $e->getMessage(), 500);
+        }
+    }
+    
+    public function duplicateBook($id)
+    {
+        try {
+            # Find the book by ID
+            $book = Book::with('bookMedia')->find($id); // Include the related media
+    
+            if ($book) {
+                # Duplicate the book
+                $newBook = $book->replicate();
+                $newBook->save();
+    
+                # Duplicate associated media
+                foreach ($book->bookMedia as $media) {
+                    $newMedia = $media->replicate();
+                    $newMedia->book_id = $newBook->id; // Associate with the new book
+                    $newMedia->save();
+                }
+    
+                return $this->sendResponse('Book and its media duplicated successfully, new book ID: ' . $newBook->book_id, $newBook, 200);
+            } else {
+                return $this->sendError('Book not found', null, 404);
+            }
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to duplicate book and media', $e->getMessage(), 500);
         }
     }
     
