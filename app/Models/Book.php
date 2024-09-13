@@ -40,12 +40,17 @@ class Book extends Model
     protected static function booted()
     {
         static::creating(function ($book) {
-            // Set the book_id before the book is created
-            $lastBook = self::latest()->first();
-            $nextId = $lastBook ? $lastBook->id + 1 : 1;
+            // Get the maximum 'id' from the 'books' table
+            $lastId = self::max('id');
+            
+            // Calculate the next ID
+            $nextId = $lastId ? $lastId + 1 : 1;
+            
+            // Format the book_id with the 'B' prefix and leading zeros
             $book->book_id = 'B' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
         });
     }
+    
 
 
     public function bookMedia()

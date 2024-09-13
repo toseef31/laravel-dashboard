@@ -156,5 +156,34 @@ class BookController extends Controller
             return $this->sendError('Failed to duplicate book and media', $e->getMessage(), 500);
         }
     }
+    public function compareBooks(Request $request){
+        try {
+            $request->validate([
+                'book_ids' => 'required|array',
+                'book_ids.*' => 'required|integer|min:0',
+            ]);
+            $books = Book::whereIn('id', $request->input('book_ids'))->with('bookMedia', 'bookSize')->get();
+            return $this->sendResponse('Books fetched successfully', $books, 200);
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to fetch selected books details', $e->getMessage(), 500);
+        }
+    }
+    public function getNextBookId()
+    {
+        try {
+            // Get the maximum 'id' from the 'Book' table
+            $lastId = Book::max('id');
+            
+            // Calculate the next ID
+            $nextId = $lastId ? $lastId + 1 : 1;
+            
+            // Format the next book ID with the 'B' prefix and leading zeros
+            $nextBookId = 'B' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+            
+            return $this->sendResponse('Next book ID fetched successfully', ['book_id' => $nextBookId], 200);
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to fetch next book ID', $e->getMessage(), 500);
+        }
+    }
     
 }

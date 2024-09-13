@@ -50,7 +50,7 @@ class UserController extends Controller
     public function deleteUser(Request $request)
     {
         try {
-            $user = User::find($request->user_id);
+            $user = User::find($request->id);
 
             if (!$user) {
                 return $this->sendError('User not found', 'User does not exisit', 404);
@@ -65,7 +65,7 @@ class UserController extends Controller
     public function editUser(Request $request)
     {
         try {
-            $user = $request->user();
+            $user = User::find($request->id);
             if(!$request->email && !$request->password && !$request->is_two_factor_enabled && !$request->two_factor_secret){
                 $user->update($request->all());
                 return $this->sendResponse('User updated successfully', ['user' => $user], 200);
@@ -76,4 +76,24 @@ class UserController extends Controller
             return $this->sendError('Failed to update user', $e->getMessage(), 500);
         }
     }
+    public function show($id)
+    {
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return $this->sendError('User not found', 'User does not exist', 404);
+            }
+    
+            unset($user->email);
+            unset($user->is_two_factor_enabled);
+            unset($user->two_factor_secret);
+            unset($user->two_factor_type);
+            unset($user->updated_at);
+    
+            return $this->sendResponse('User fetched successfully', $user, 200);
+        } catch (\Exception $e) {
+            return $this->sendError('Failed to fetch user', $e->getMessage(), 500);
+        }
+    }
+    
 }

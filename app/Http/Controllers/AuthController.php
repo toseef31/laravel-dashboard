@@ -25,7 +25,12 @@ class AuthController extends Controller
             }
             if($user->is_two_factor_enabled){
                 $timeline = $this->selectTwoFactorTimeline('select', $user->two_factor_secret);
-                return $this->sendResponse('Two Factor Authentication enabled, Please select the method', $timeline, 401);
+                $methods = $this->checknotEnabledMethod($user->two_factor_type);
+                $data = [
+                    'timeline' => $timeline,
+                    'disabled' => $methods
+                ];
+                return $this->sendResponse('Two Factor Authentication enabled, Please select the method', $data , 401);
             }
             $token = $user->createToken('auth_token')->plainTextToken;
             return $this->sendResponse('Login Successful', ['user' => $user, 'token' => $token, 'token_type' => 'Bearer'], 200);
@@ -62,7 +67,7 @@ class AuthController extends Controller
                 'created_at' => now(),
                 'expires_at' => now()->addMinutes(30),
             ]);
-            $url = env('FRONT_APP_URL').'/reset-password?token='.$resetPasswordToken;
+            $url = env('FRONT_APP_URL').'/auth/reset-password?token='.$resetPasswordToken;
             $this->sendEmail(['url' => $url] ,$request->email, 'Reset Passwrod Request','Emails.reset-password');
 
             return $this->sendResponse('Password reset link sent to your email', ['reset_password_token' => $resetPasswordToken, 'email' => $user->email], 200);
@@ -154,4 +159,28 @@ class AuthController extends Controller
         }
         
     }
+    private function checkNotEnabledMethod($methods)
+    {
+        // Convert the comma-separated input string to an array and trim spaces
+        $methodsArray = array_map('trim', explode(',', $methods));
+    
+        // Define the list of all possible enabled methods
+        $enabledMethods = ['otp', 'secret_codes'];
+    
+        // Initialize an array to hold the methods that are not included in the input
+        $notIncludedMethods = [];
+    
+        // Loop through each enabled method to check if it's in the input
+        foreach ($enabledMethods as $method) {
+            if (!in_array($method, $methodsArray)) {
+                $notIncludedMethods[] = $method;
+            }
+        }
+    
+        // Return a comma-separated string of methods that are not included, or null if all are included
+        return !empty($notIncludedMethods) ? implode(',', $notIncludedMethods) : null;
+    }
+    
+    
+    
 }

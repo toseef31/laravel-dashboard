@@ -10,13 +10,13 @@ class TwoFactorController extends Controller
 {
     public function enableTwoFactor(Request $request)
     {
+        
         try {
             $request->validate([
                 'two_factor_type' => 'required|string|in:otp,secret_codes'
             ]);
         
             $user = $request->user();
-        
             # Retrieve the current enabled 2FA methods, if any
             $enabledMethods = $user->two_factor_type ? explode(',', $user->two_factor_type) : [];
         
@@ -51,6 +51,7 @@ class TwoFactorController extends Controller
     }
     public function disableTwoFactor(Request $request)
     {
+        
         try {
             $request->validate([
                 'two_factor_type' => 'required|string|in:otp,secret_codes'

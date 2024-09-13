@@ -23,12 +23,8 @@ Route::post('/select-two-factor/{signature}/{type}', [\App\Http\Controllers\Auth
 Route::post('/submit-two-factor/{signature}', [\App\Http\Controllers\TwoFactorController::class, 'submitTwoFactor']);
 Route::post('/resend-otp/{signature}', [\App\Http\Controllers\TwoFactorController::class, 'resendOTP']);
 
-//Route::middleware('auth:sanctum')->group(function () {
-    # User Routes
-    Route::post('/create-user', [\App\Http\Controllers\UserController::class, 'store']);
-    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
-    Route::post('/user/delete', [\App\Http\Controllers\UserController::class, 'deleteUser']);
-    Route::post('/user/edit', [\App\Http\Controllers\UserController::class, 'editUser']);
+Route::middleware('auth:sanctum')->group(function () {
+   
 
     # Auth Routes
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
@@ -37,23 +33,36 @@ Route::post('/resend-otp/{signature}', [\App\Http\Controllers\TwoFactorControlle
     Route::post('/enable-two-factor', [\App\Http\Controllers\TwoFactorController::class, 'enableTwoFactor']);
     Route::post('/disable-two-factor', [\App\Http\Controllers\TwoFactorController::class, 'disableTwoFactor']);
 
-    # Book Size Routes
-    Route::post('/create-size', [\App\Http\Controllers\BookSizeController::class, 'store']);
-    Route::get('/sizes', [\App\Http\Controllers\BookSizeController::class, 'index']);
-    Route::post('/size/delete', [\App\Http\Controllers\BookSizeController::class, 'deleteSize']);
-    Route::post('/size/edit', [\App\Http\Controllers\BookSizeController::class, 'editSize']);
-    Route::get('/size/{id}', [\App\Http\Controllers\BookSizeController::class, 'show']);
+    
+});
+# User Routes
+Route::post('/create-user', [\App\Http\Controllers\UserController::class, 'store']);
+Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
+Route::post('/user/delete', [\App\Http\Controllers\UserController::class, 'deleteUser']);
+Route::post('/user/edit', [\App\Http\Controllers\UserController::class, 'editUser']);
+Route::get('/user/{id}', [\App\Http\Controllers\UserController::class, 'show']);
 
-    # Book Routes
-    Route::post('/create-book', [\App\Http\Controllers\BookController::class, 'store']);
-    Route::get('/books', [\App\Http\Controllers\BookController::class, 'index']);
-    Route::post('/book/delete', [\App\Http\Controllers\BookController::class, 'deleteBook']);
-    Route::post('/book/edit', [\App\Http\Controllers\BookController::class, 'editBook']);
-    Route::get('/book/{id}', [\App\Http\Controllers\BookController::class, 'show']);
-    Route::post('/book/duplicate/{id}', [\App\Http\Controllers\BookController::class, 'duplicateBook']);
+# Book Size Routes
+Route::post('/create-size', [\App\Http\Controllers\BookSizeController::class, 'store']);
+Route::get('/sizes', [\App\Http\Controllers\BookSizeController::class, 'index']);
+Route::post('/size/delete', [\App\Http\Controllers\BookSizeController::class, 'deleteSize']);
+Route::post('/size/edit', [\App\Http\Controllers\BookSizeController::class, 'editSize']);
+Route::get('/size/{id}', [\App\Http\Controllers\BookSizeController::class, 'show']);
 
-    # Book Media Routes
-    Route::post('/create-book-media', [\App\Http\Controllers\BookMediaController::class, 'store']);
-    Route::post('/book-media/delete', [\App\Http\Controllers\BookMediaController::class, 'deleteBookMedia']);
-    Route::get('/book-media/{id}', [\App\Http\Controllers\BookMediaController::class, 'show']);
-//});
+# Book Routes
+Route::post('/create-book', [\App\Http\Controllers\BookController::class, 'store']);
+Route::get('/books', [\App\Http\Controllers\BookController::class, 'index']);
+Route::post('/book/delete', [\App\Http\Controllers\BookController::class, 'deleteBook']);
+Route::post('/book/edit', [\App\Http\Controllers\BookController::class, 'editBook']);
+Route::get('/book/{id}', [\App\Http\Controllers\BookController::class, 'show']);
+Route::post('/book/duplicate/{id}', [\App\Http\Controllers\BookController::class, 'duplicateBook']);
+Route::post('/books/compare', [\App\Http\Controllers\BookController::class, 'compareBooks']);
+Route::get('/books/next', [\App\Http\Controllers\BookController::class, 'getNextBookId']);
+
+# Book Media Routes
+Route::post('/create-book-media', [\App\Http\Controllers\BookMediaController::class, 'store']);
+Route::post('/book-media/delete', [\App\Http\Controllers\BookMediaController::class, 'deleteBookMedia']);
+Route::get('/book-media/{id}', [\App\Http\Controllers\BookMediaController::class, 'show']);
+
+Route::get('/old-books-store', [\App\Http\Controllers\Data\BookController::class, 'storeBooksFromConfig']);
+Route::get('/old-books-media-store', [\App\Http\Controllers\Data\BookController::class, 'insertMedia']);
