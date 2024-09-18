@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BookMedia;
+use App\Models\HardyReelMedia;
 
-class BookMediaController extends Controller
+class HardyReelMediaController extends Controller
 {
     public function store(Request $request)
     {
         try {
             $validatedData = $request->validate([
-                'book_id' => 'required|integer',
+                'reel_id' => 'required|integer',
                 'media_file' => 'required', # Accepts either a file or an array of files
                 'media_file.*' => 'file|mimes:jpg,jpeg,png,gif|max:2048', # Validation for each file
             ]);
@@ -27,19 +27,19 @@ class BookMediaController extends Controller
     
             foreach ($files as $file) {
                 $fileName = $this->cleanString(time() . '_' . $file->getClientOriginalName()).'.'.$file->getClientOriginalExtension();
-                $filePath = $file->storeAs('uploads', $fileName, 'public');
+                $filePath = $file->storeAs('uploads/hardy-reels', $fileName, 'public');
     
-                $bookMedia = new BookMedia();
-                $bookMedia->book_id = $validatedData['book_id'];
-                $bookMedia->media_path = $filePath;
-                $bookMedia->save();
+                $reelMedia = new HardyReelMedia();
+                $reelMedia->reel_id = $validatedData['reel_id'];
+                $reelMedia->media_path = $filePath;
+                $reelMedia->save();
     
                 $uploadedFiles[] = [
-                    'id' => $bookMedia->id,
-                    'book_id' => $bookMedia->book_id,
+                    'id' => $reelMedia->id,
+                    'reel_id' => $reelMedia->reel_id,
                     'file_name' => $fileName,
-                    'file_path' => $bookMedia->media_path,
-                    'created_at' => $bookMedia->created_at,
+                    'file_path' => $reelMedia->media_path,
+                    'created_at' => $reelMedia->created_at,
                 ];
             }
     
@@ -48,20 +48,20 @@ class BookMediaController extends Controller
             return $this->sendError('Failed to add file(s)', $e->getMessage(), 500);
         }
     }
-    public function deleteBookMedia(Request $request)
+    public function deleteHardyReelMedia(Request $request)
     {
         try {
             $validatedData = $request->validate([
                 'id' => 'required|integer',
             ]);
     
-            $bookMedia = BookMedia::find($validatedData['id']);
+            $reelMedia = HardyReelMedia::find($validatedData['id']);
     
-            if (!$bookMedia) {
+            if (!$reelMedia) {
                 return $this->sendError('File not found', 'The file you are trying to delete does not exist.', 404);
             }
     
-            $bookMedia->delete();
+            $reelMedia->delete();
     
             return $this->sendResponse('File deleted successfully.', [], 200);
         } catch (\Exception $e) {
@@ -72,9 +72,9 @@ class BookMediaController extends Controller
     public function show($id)
     {
         try {
-            $bookMedia = BookMedia::where('book_id', $id)->get();
+            $reelMedia = HardyReelMedia::where('reel_id', $id)->get();
             $data = [
-                'media' => $bookMedia,
+                'media' => $reelMedia,
                 'media_path' => '/storage/'
             ];
             return $this->sendResponse('File(s) fetched successfully', $data, 200);
@@ -82,5 +82,4 @@ class BookMediaController extends Controller
             return $this->sendError('Failed to fetch file', $e->getMessage(), 500);
         }
     }
-    
 }
