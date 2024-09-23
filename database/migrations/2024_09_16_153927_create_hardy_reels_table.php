@@ -14,24 +14,24 @@ return new class extends Migration
         Schema::create('hardy_reels', function (Blueprint $table) {
             $table->id();
             $table->string('reel_id')->unique();
-            $table->string('makers_name')->nullable();
-            $table->string('model')->nullable();
-            $table->string('sub_model')->nullable();
-            $table->string('size')->nullable();
-            $table->string('approximate_date')->nullable();
+            $table->text('makers_name')->nullable();
+            $table->text('model')->nullable();
+            $table->text('sub_model')->nullable();
+            $table->text('size')->nullable();
+            $table->text('approximate_date')->nullable();
 
-            $table->string('foot')->nullable();
-            $table->string('handle')->nullable();
-            $table->string('tension_regultor')->nullable();
-            $table->string('details')->nullable();
-            $table->string('condition')->nullable();
+            $table->text('foot')->nullable();
+            $table->text('handle')->nullable();
+            $table->text('tension_regultor')->nullable();
+            $table->text('details')->nullable();
+            $table->text('condition')->nullable();
 
             $table->string('add_date')->nullable();
-            $table->float('valuation')->nullable();
-            $table->float('cost_price')->nullable();
+            $table->string('valuation')->nullable();
+            $table->string('cost_price')->nullable();
 
             $table->string('sold_date')->nullable();
-            $table->float('sold_price')->nullable();
+            $table->string('sold_price')->nullable();
             $table->string('buyer_name')->nullable();
             $table->string('buyer_email')->nullable();
 

@@ -22,11 +22,11 @@ return new class extends Migration
             $table->text('condition')->nullable();
 
             $table->string('add_date')->nullable();
-            $table->float('valuation')->nullable();
-            $table->float('cost_price')->nullable();
+            $table->string('valuation')->nullable();
+            $table->string('cost_price')->nullable();
 
             $table->string('sold_date')->nullable();
-            $table->float('sold_price')->nullable();
+            $table->string('sold_price')->nullable();
             $table->string('buyer_name')->nullable();
             $table->string('buyer_email')->nullable();
 

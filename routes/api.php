@@ -35,6 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     
 });
+
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
+
+
 # User Routes
 Route::post('/create-user', [\App\Http\Controllers\UserController::class, 'store']);
 Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
@@ -93,5 +97,10 @@ Route::get('/hardyreel-media/{id}', [\App\Http\Controllers\HardyReelMediaControl
 
 
 
+
 Route::get('/old-books-store', [\App\Http\Controllers\Data\BookController::class, 'storeBooksFromConfig']);
 Route::get('/old-books-media-store', [\App\Http\Controllers\Data\BookController::class, 'insertMedia']);
+Route::get('/old-hardy-media-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'insertMediaHardy']);
+Route::get('/old-ephemera-media-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'insertMediaEphemera']);
+Route::get('/old-ephemera-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'storeEphemeraFromConfig']);
+Route::get('/old-hardy-reels-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'storeHardyReelsFromConfig']);
