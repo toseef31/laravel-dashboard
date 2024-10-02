@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\EphemeraMedia;
+use DB;
 
 class Ephemera extends Model
 {
@@ -28,16 +29,21 @@ class Ephemera extends Model
     protected static function booted()
     {
         static::creating(function ($ephemera) {
-            // Get the maximum 'id' from the 'books' table
-            $lastId = self::max('id');
-            
-            // Calculate the next ID
-            $nextId = $lastId ? $lastId + 1 : 1;
-            
-            // Format the book_id with the 'B' prefix and leading zeros
-            $ephemera->ephemera_id = 'E' . $nextId;
+            // Get the next auto-increment value for the ephemeras table
+            $nextId = DB::select("SHOW TABLE STATUS LIKE 'ephemeras'");
+            $nextAutoIncrementId = $nextId[0]->Auto_increment;
+    
+            // Get the maximum value of the ephemera_id column (ignoring the 'E' prefix)
+            $maxEphemeraId = self::max(DB::raw("CAST(SUBSTRING(ephemera_id, 2) AS UNSIGNED)"));
+    
+            // Determine the next ID to use, ensuring it's greater than both auto-increment and the highest ephemera_id
+            $nextIdToUse = max($nextAutoIncrementId, $maxEphemeraId + 1);
+    
+            // Generate the new ephemera_id with 'E' prefix
+            $ephemera->ephemera_id = 'E' . $nextIdToUse;
         });
     }
+    
     
 
 

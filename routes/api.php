@@ -80,6 +80,53 @@ Route::post('/hardyreel/edit', [\App\Http\Controllers\HardyReelController::class
 Route::get('/hardyreel/{id}', [\App\Http\Controllers\HardyReelController::class, 'show']);
 Route::get('/hardyreels/next', [\App\Http\Controllers\HardyReelController::class, 'getNextHardyReelId']);
 
+# OtherReel Routes
+Route::post('/create-otherreel', [\App\Http\Controllers\OtherReelController::class, 'store']);
+Route::get('/otherreels', [\App\Http\Controllers\OtherReelController::class, 'index']);
+Route::post('/otherreel/delete', [\App\Http\Controllers\OtherReelController::class, 'deleteOtherReel']);
+Route::post('/otherreel/edit', [\App\Http\Controllers\OtherReelController::class, 'editOtherReel']);
+Route::get('/otherreel/{id}', [\App\Http\Controllers\OtherReelController::class, 'show']);
+Route::get('/otherreels/next', [\App\Http\Controllers\OtherReelController::class, 'getNextOtherReelId']);
+
+# Lures Routes
+Route::post('/create-lures', [\App\Http\Controllers\LuresController::class, 'store']);
+Route::get('/lures', [\App\Http\Controllers\LuresController::class, 'index']);
+Route::post('/lures/delete', [\App\Http\Controllers\LuresController::class, 'deleteLures']);
+Route::post('/lures/edit', [\App\Http\Controllers\LuresController::class, 'editLures']);
+Route::get('/lure/{id}', [\App\Http\Controllers\LuresController::class, 'show']);
+Route::get('/lures/next', [\App\Http\Controllers\LuresController::class, 'getNextLuresId']);
+
+# Rods Routes
+Route::post('/create-rods', [\App\Http\Controllers\RodsController::class, 'store']);
+Route::get('/rods', [\App\Http\Controllers\RodsController::class, 'index']);
+Route::post('/rods/delete', [\App\Http\Controllers\RodsController::class, 'deleteRods']);
+Route::post('/rods/edit', [\App\Http\Controllers\RodsController::class, 'editRods']);
+Route::get('/rod/{id}', [\App\Http\Controllers\RodsController::class, 'show']);
+Route::get('/rods/next', [\App\Http\Controllers\RodsController::class, 'getNextRodsId']);
+
+# OtherTackle Routes
+Route::post('/create-othertackle', [\App\Http\Controllers\OtherTackleController::class, 'store']);
+Route::get('/othertackles', [\App\Http\Controllers\OtherTackleController::class, 'index']);
+Route::post('/othertackles/delete', [\App\Http\Controllers\OtherTackleController::class, 'deleteOtherTackle']);
+Route::post('/othertackles/edit', [\App\Http\Controllers\OtherTackleController::class, 'editOtherTackle']);
+Route::get('/othertackle/{id}', [\App\Http\Controllers\OtherTackleController::class, 'show']);
+Route::get('/othertackles/next', [\App\Http\Controllers\OtherTackleController::class, 'getNextOtherTackleId']);
+
+# InUseTackles Routes
+Route::post('/create-inusetackle', [\App\Http\Controllers\InUseTackleController::class, 'store']);
+Route::get('/inusetackles', [\App\Http\Controllers\InUseTackleController::class, 'index']);
+Route::post('/inusetackles/delete', [\App\Http\Controllers\InUseTackleController::class, 'deleteInUseTackle']);
+Route::post('/inusetackles/edit', [\App\Http\Controllers\InUseTackleController::class, 'editInUseTackle']);
+Route::get('/inusetackle/{id}', [\App\Http\Controllers\InUseTackleController::class, 'show']);
+Route::get('/inusetackles/next', [\App\Http\Controllers\InUseTackleController::class, 'getNextInUseTackleId']);
+
+# Penn Catalogues Routes
+Route::post('/create-penn-catalogues', [\App\Http\Controllers\PennCatalogueController::class, 'store']);
+Route::get('/penn-catalogues', [\App\Http\Controllers\PennCatalogueController::class, 'index']);
+Route::post('/penn-catalogues/delete', [\App\Http\Controllers\PennCatalogueController::class, 'deletePennCatalogue']);
+Route::post('/penn-catalogues/edit', [\App\Http\Controllers\PennCatalogueController::class, 'editPennCatalogue']);
+Route::get('/penn-catalogue/{id}', [\App\Http\Controllers\PennCatalogueController::class, 'show']);
+
 # Book Media Routes
 Route::post('/create-book-media', [\App\Http\Controllers\BookMediaController::class, 'store']);
 Route::post('/book-media/delete', [\App\Http\Controllers\BookMediaController::class, 'deleteBookMedia']);
@@ -95,6 +142,35 @@ Route::post('/create-hardyreel-media', [\App\Http\Controllers\HardyReelMediaCont
 Route::post('/hardyreel-media/delete', [\App\Http\Controllers\HardyReelMediaController::class, 'deleteHardyReelMedia']);
 Route::get('/hardyreel-media/{id}', [\App\Http\Controllers\HardyReelMediaController::class, 'show']);
 
+# OtherReels Media Routes
+Route::post('/create-otherreel-media', [\App\Http\Controllers\OtherReelMediaController::class, 'store']);
+Route::post('/otherreel-media/delete', [\App\Http\Controllers\OtherReelMediaController::class, 'deleteOtherReelMedia']);
+Route::get('/otherreel-media/{id}', [\App\Http\Controllers\OtherReelMediaController::class, 'show']);
+
+# Lures Media Routes
+Route::post('/create-lures-media', [\App\Http\Controllers\LuresMediaController::class, 'store']);
+Route::post('/lures-media/delete', [\App\Http\Controllers\LuresMediaController::class, 'deleteLuresMedia']);
+Route::get('/lures-media/{id}', [\App\Http\Controllers\LuresMediaController::class, 'show']);
+
+# Rods Media Routes
+Route::post('/create-rods-media', [\App\Http\Controllers\RodsMediaController::class, 'store']);
+Route::post('/rods-media/delete', [\App\Http\Controllers\RodsMediaController::class, 'deleteRodsMedia']);
+Route::get('/rods-media/{id}', [\App\Http\Controllers\RodsMediaController::class, 'show']);
+
+# Rods Media Routes
+Route::post('/create-penn-catalogues-media', [\App\Http\Controllers\PennCatalogueMediaController::class, 'store']);
+Route::post('/penn-catalogues-media/delete', [\App\Http\Controllers\PennCatalogueMediaController::class, 'deletePennCatalogueMedia']);
+Route::get('/penn-catalogues-media/{id}', [\App\Http\Controllers\PennCatalogueMediaController::class, 'show']);
+
+# OtherTackle Media Routes
+Route::post('/create-othertackle-media', [\App\Http\Controllers\OtherTackleMediaController::class, 'store']);
+Route::post('/othertackle-media/delete', [\App\Http\Controllers\OtherTackleMediaController::class, 'deleteOtherTackleMedia']);
+Route::get('/othertackle-media/{id}', [\App\Http\Controllers\OtherTackleMediaController::class, 'show']);
+
+# OtherTackle Media Routes
+Route::post('/create-inusetackle-media', [\App\Http\Controllers\InUseTackleMediaController::class, 'store']);
+Route::post('/inusetackle-media/delete', [\App\Http\Controllers\InUseTackleMediaController::class, 'deleteInUseTackleMedia']);
+Route::get('/inusetackle-media/{id}', [\App\Http\Controllers\InUseTackleMediaController::class, 'show']);
 
 
 
@@ -104,3 +180,10 @@ Route::get('/old-hardy-media-store', [\App\Http\Controllers\Data\HardyAndEphemer
 Route::get('/old-ephemera-media-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'insertMediaEphemera']);
 Route::get('/old-ephemera-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'storeEphemeraFromConfig']);
 Route::get('/old-hardy-reels-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'storeHardyReelsFromConfig']);
+Route::get('/old-lures-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'storeLuresFromConfig']);
+Route::get('/old-rods-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'storeRodsFromConfig']);
+Route::get('/old-penn-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'storePennFromConfig']);
+Route::get('/old-lures-media-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'insertMediaLures']);
+Route::get('/old-rods-media-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'insertMediaRods']);
+Route::get('/old-penn-media-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'insertMediaPenn']);
+

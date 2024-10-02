@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class HardyReel extends Model
+class OtherReel extends Model
 {
     use HasFactory;
 
@@ -33,9 +33,9 @@ class HardyReel extends Model
 
 protected static function booted()
 {
-    static::creating(function ($hardyreel) {
+    static::creating(function ($otherreel) {
         // Get the next auto-increment value for the hardy_reels table
-        $nextId = DB::select("SHOW TABLE STATUS LIKE 'hardy_reels'");
+        $nextId = DB::select("SHOW TABLE STATUS LIKE 'other_reels'");
         $nextAutoIncrementId = $nextId[0]->Auto_increment;
 
         // Get the maximum value of the reel_id column (ignoring the 'H' prefix)
@@ -45,7 +45,7 @@ protected static function booted()
         $nextIdToUse = max($nextAutoIncrementId, $maxReelId + 1);
 
         // Format the reel_id with the 'H' prefix
-        $hardyreel->reel_id = 'H' . $nextIdToUse;
+        $otherreel->reel_id = 'R' . $nextIdToUse;
     });
 }
 
@@ -53,7 +53,7 @@ protected static function booted()
 
     public function reelMedia()
     {
-        return $this->hasMany(HardyReelMedia::class, 'reel_id', 'id');
+        return $this->hasMany(OtherReelMedia::class, 'reel_id', 'id');
     }
     
 }

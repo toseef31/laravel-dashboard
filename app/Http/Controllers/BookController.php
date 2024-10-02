@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use DB;
 
 class BookController extends Controller
 {
@@ -172,13 +173,17 @@ class BookController extends Controller
     {
         try {
             // Get the maximum 'id' from the 'Book' table
-            $lastId = Book::max('id');
-            
-            // Calculate the next ID
-            $nextId = $lastId ? $lastId + 1 : 1;
-            
-            // Format the next book ID with the 'B' prefix and leading zeros
-            $nextBookId = 'B' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+            $nextId = DB::select("SHOW TABLE STATUS LIKE 'books'");
+            $nextAutoIncrementId = $nextId[0]->Auto_increment;
+
+            // Get the maximum value of the book_id column (ignoring the 'B' prefix)
+            $maxBookId = Book::max(DB::raw("CAST(SUBSTRING(book_id, 2) AS UNSIGNED)"));
+
+            // Determine the next ID to be greater than both the next auto-increment and max book_id
+            $nextIdToUse = max($nextAutoIncrementId, $maxBookId + 1);
+
+            // Generate the next book_id with 'B' prefix and 5 digits, padded with zeros
+            $nextBookId = 'B' . str_pad($nextIdToUse, 5, '0', STR_PAD_LEFT);
             
             return $this->sendResponse('Next book ID fetched successfully', ['book_id' => $nextBookId], 200);
         } catch (\Exception $e) {

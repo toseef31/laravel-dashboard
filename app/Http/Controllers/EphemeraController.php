@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ephemera;
+use DB;
 
 class EphemeraController extends Controller
 {
@@ -66,15 +67,19 @@ class EphemeraController extends Controller
     {
         try {
             // Get the maximum 'id' from the 'Book' table
-            $lastId = Ephemera::max('id');
+            $nextId = DB::select("SHOW TABLE STATUS LIKE 'ephemeras'");
+            $nextAutoIncrementId = $nextId[0]->Auto_increment;
+
+            // Get the maximum value of the ephemera_id column (ignoring the 'E' prefix)
+            $maxEphemeraId = Ephemera::max(DB::raw("CAST(SUBSTRING(ephemera_id, 2) AS UNSIGNED)"));
+
+            // Determine the next ID to use, ensuring it's greater than both auto-increment and the highest ephemera_id
+            $nextIdToUse = max($nextAutoIncrementId, $maxEphemeraId + 1);
+
+            // Generate the next ephemera_id with 'E' prefix
+            $nextEphemeraId = 'E' . $nextIdToUse;
             
-            // Calculate the next ID
-            $nextId = $lastId ? $lastId + 1 : 1;
-            
-            // Format the next book ID with the 'B' prefix and leading zeros
-            $nexEphemeraId = 'E' . $nextId;
-            
-            return $this->sendResponse('Next ephemera ID fetched successfully', ['ephemera_id' => $nexEphemeraId], 200);
+            return $this->sendResponse('Next ephemera ID fetched successfully', ['ephemera_id' => $nextEphemeraId], 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to fetch next ephemera ID', $e->getMessage(), 500);
         }
