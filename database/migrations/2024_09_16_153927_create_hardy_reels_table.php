@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('hardy_reels', function (Blueprint $table) {
             $table->id();
             $table->string('reel_id')->unique();
-            $table->text('makers_name')->nullable();
+            $table->text('makers_name')->nullable()->default('Hardy');
             $table->text('model')->nullable();
             $table->text('sub_model')->nullable();
             $table->text('size')->nullable();

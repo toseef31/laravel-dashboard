@@ -20,6 +20,7 @@ class InUseTackle extends Model
         'foot',
         'condition',
         'handle',
+        'transition_regulator',
         'serial_no',
         'details',
         'condition',

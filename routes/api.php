@@ -72,6 +72,13 @@ Route::post('/ephemera/edit', [\App\Http\Controllers\EphemeraController::class, 
 Route::get('/ephemera/{id}', [\App\Http\Controllers\EphemeraController::class, 'show']);
 Route::get('/ephemeras/next', [\App\Http\Controllers\EphemeraController::class, 'getNextEphemeraId']);
 
+# Ephemera Types Routes
+Route::post('/create-type', [\App\Http\Controllers\EphemeraTypesController::class, 'store']);
+Route::get('/types', [\App\Http\Controllers\EphemeraTypesController::class, 'index']);
+Route::post('/type/delete', [\App\Http\Controllers\EphemeraTypesController::class, 'deleteType']);
+Route::post('/type/edit', [\App\Http\Controllers\EphemeraTypesController::class, 'editType']);
+Route::get('/type/{id}', [\App\Http\Controllers\EphemeraTypesController::class, 'show']);
+
 # HardyReel Routes
 Route::post('/create-hardyreel', [\App\Http\Controllers\HardyReelController::class, 'store']);
 Route::get('/hardyreels', [\App\Http\Controllers\HardyReelController::class, 'index']);
@@ -179,6 +186,9 @@ Route::get('/old-books-media-store', [\App\Http\Controllers\Data\BookController:
 Route::get('/old-hardy-media-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'insertMediaHardy']);
 Route::get('/old-ephemera-media-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'insertMediaEphemera']);
 Route::get('/old-ephemera-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'storeEphemeraFromConfig']);
+Route::get('/old-other-reels-store', [\App\Http\Controllers\Data\OtherReelsOtherTacklesInUseTacklesController::class, 'storeoTHERReelsFromConfig']);
+Route::get('/old-other-tackles-store', [\App\Http\Controllers\Data\OtherReelsOtherTacklesInUseTacklesController::class, 'storeOtherTackleFromConfig']);
+Route::get('/old-inuse-tackles-store', [\App\Http\Controllers\Data\OtherReelsOtherTacklesInUseTacklesController::class, 'storeInUseTackleFromConfig']);
 Route::get('/old-hardy-reels-store', [\App\Http\Controllers\Data\HardyAndEphemeraController::class, 'storeHardyReelsFromConfig']);
 Route::get('/old-lures-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'storeLuresFromConfig']);
 Route::get('/old-rods-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'storeRodsFromConfig']);

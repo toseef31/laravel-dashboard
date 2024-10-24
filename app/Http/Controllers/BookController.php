@@ -140,14 +140,18 @@ class BookController extends Controller
             if ($book) {
                 # Duplicate the book
                 $newBook = $book->replicate();
+                $newBook->book_condition = '';
+                $newBook->jacket_condition = '';
+                $newBook->comment = '';
+                $newBook->add_date = '';
                 $newBook->save();
     
-                # Duplicate associated media
-                foreach ($book->bookMedia as $media) {
-                    $newMedia = $media->replicate();
-                    $newMedia->book_id = $newBook->id; // Associate with the new book
-                    $newMedia->save();
-                }
+                // # Duplicate associated media
+                // foreach ($book->bookMedia as $media) {
+                //     $newMedia = $media->replicate();
+                //     $newMedia->book_id = $newBook->id; // Associate with the new book
+                //     $newMedia->save();
+                // }
     
                 return $this->sendResponse('Book and its media duplicated successfully, new book ID: ' . $newBook->book_id, $newBook, 200);
             } else {
