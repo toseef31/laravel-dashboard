@@ -112,7 +112,7 @@ class RodsController extends Controller
     }
     public function show($id){
         try {
-            $rods = Rods::find($id);
+            $rods = Rods::with('rodsMedia')->find($id);
             if($rods){
                 return $this->sendResponse('Rods fetched successfully', $rods, 200);
             }else{

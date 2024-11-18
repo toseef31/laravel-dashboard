@@ -112,7 +112,7 @@ class InUseTackleController extends Controller
     }
     public function show($id){
         try {
-            $tackle = InUseTackle::find($id);
+            $tackle = InUseTackle::with('tackleMedia')->find($id);
             if($tackle){
                 return $this->sendResponse('InUseTackle fetched successfully', $tackle, 200);
             }else{

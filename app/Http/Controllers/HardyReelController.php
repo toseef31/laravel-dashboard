@@ -101,7 +101,7 @@ class HardyReelController extends Controller
     }
     public function show($id){
         try {
-            $reel = HardyReel::find($id);
+            $reel = HardyReel::with('reelMedia')->find($id);
             if($reel){
                 return $this->sendResponse('HardyReel fetched successfully', $reel, 200);
             }else{

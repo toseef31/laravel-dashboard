@@ -112,7 +112,7 @@ class OtherTackleController extends Controller
     }
     public function show($id){
         try {
-            $tackle = OtherTackle::find($id);
+            $tackle = OtherTackle::with('tackleMedia')->find($id);
             if($tackle){
                 return $this->sendResponse('OtherTackle fetched successfully', $tackle, 200);
             }else{

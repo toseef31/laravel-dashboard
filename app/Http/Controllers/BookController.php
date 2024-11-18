@@ -120,7 +120,7 @@ class BookController extends Controller
     }
     public function show(Request $request){
         try {
-            $book = Book::find($request->id);
+            $book = Book::with('bookMedia')->find($request->id);
             if($book){
                 return $this->sendResponse('Book fetched successfully', $book, 200);
             }else{
@@ -146,12 +146,12 @@ class BookController extends Controller
                 $newBook->add_date = '';
                 $newBook->save();
     
-                // # Duplicate associated media
-                // foreach ($book->bookMedia as $media) {
-                //     $newMedia = $media->replicate();
-                //     $newMedia->book_id = $newBook->id; // Associate with the new book
-                //     $newMedia->save();
-                // }
+                # Duplicate associated media
+                foreach ($book->bookMedia as $media) {
+                    $newMedia = $media->replicate();
+                    $newMedia->book_id = $newBook->id; // Associate with the new book
+                    $newMedia->save();
+                }
     
                 return $this->sendResponse('Book and its media duplicated successfully, new book ID: ' . $newBook->book_id, $newBook, 200);
             } else {

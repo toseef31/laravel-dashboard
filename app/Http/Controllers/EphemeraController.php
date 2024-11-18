@@ -107,7 +107,7 @@ class EphemeraController extends Controller
     }
     public function show($id){
         try {
-            $ephemera = Ephemera::find($id);
+            $ephemera = Ephemera::with('ephemeraMedia')->find($id);
             if($ephemera){
                 return $this->sendResponse('Ephemera fetched successfully', $ephemera, 200);
             }else{

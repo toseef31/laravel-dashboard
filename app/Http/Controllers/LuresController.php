@@ -107,7 +107,7 @@ class LuresController extends Controller
     }
     public function show($id){
         try {
-            $lures = Lures::find($id);
+            $lures = Lures::with('luresMedia')->find($id);
             if($lures){
                 return $this->sendResponse('Lures fetched successfully', $lures, 200);
             }else{

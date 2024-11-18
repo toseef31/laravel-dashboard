@@ -101,7 +101,7 @@ class OtherReelController extends Controller
     }
     public function show($id){
         try {
-            $reel = OtherReel::find($id);
+            $reel = OtherReel::with('reelMedia')->find($id);
             if($reel){
                 return $this->sendResponse('OtherReel fetched successfully', $reel, 200);
             }else{

@@ -82,7 +82,7 @@ class PennCatalogueController extends Controller
     }
     public function show($id){
         try {
-            $pennCatalogue = PennCatalogue::find($id);
+            $pennCatalogue = PennCatalogue::with('pennCatalogueMedia')->find($id);
             if($pennCatalogue){
                 return $this->sendResponse('PennCatalogue fetched successfully', $pennCatalogue, 200);
             }else{
