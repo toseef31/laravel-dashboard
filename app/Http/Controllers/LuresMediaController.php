@@ -15,25 +15,25 @@ class LuresMediaController extends Controller
                 'media_file' => 'required', # Accepts either a file or an array of files
                 'media_file.*' => 'file|mimes:jpg,jpeg,png,gif|max:2048', # Validation for each file
             ]);
-    
+
             $files = $request->file('media_file');
-    
+
             # Check if it's an array of files or a single file
             if (!is_array($files)) {
                 $files = [$files]; # Convert single file to an array for uniform processing
             }
-    
+
             $uploadedFiles = [];
-    
+
             foreach ($files as $file) {
-                $fileName = $this->cleanString(time() . '_' . $file->getClientOriginalName()).'.'.$file->getClientOriginalExtension();
+                $fileName = $this->cleanString(time() . '_' . $file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
                 $filePath = $file->storeAs('uploads/lures', $fileName, 'public');
-    
+
                 $luresMedia = new LuresMedia();
                 $luresMedia->lures_id = $validatedData['lures_id'];
                 $luresMedia->media_path = $filePath;
                 $luresMedia->save();
-    
+
                 $uploadedFiles[] = [
                     'id' => $luresMedia->id,
                     'lures_id' => $luresMedia->lures_id,
@@ -42,7 +42,7 @@ class LuresMediaController extends Controller
                     'created_at' => $luresMedia->created_at,
                 ];
             }
-    
+
             return $this->sendResponse('File(s) uploaded successfully.', $uploadedFiles, 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to add file(s)', $e->getMessage(), 500);
@@ -54,21 +54,21 @@ class LuresMediaController extends Controller
             $validatedData = $request->validate([
                 'id' => 'required|integer',
             ]);
-    
+
             $luresMedia = LuresMedia::find($validatedData['id']);
-    
+
             if (!$luresMedia) {
                 return $this->sendError('File not found', 'The file you are trying to delete does not exist.', 404);
             }
-    
+
             $luresMedia->delete();
-    
+
             return $this->sendResponse('File deleted successfully.', [], 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to delete file', $e->getMessage(), 500);
         }
     }
-    
+
     public function show($id)
     {
         try {
@@ -81,5 +81,23 @@ class LuresMediaController extends Controller
         } catch (\Exception $e) {
             return $this->sendError('Failed to fetch file', $e->getMessage(), 500);
         }
+    }
+
+    public function setThumbnail(Request $request)
+    {
+        $request->validate([
+            'lures_id' => 'required|integer|exists:lures,id',
+            'media_id' => 'required|integer|exists:lures_media,id',
+        ]);
+
+        // Reset any existing thumbnail for this book
+        LuresMedia::where('lures_id', $request->lures_id)
+            ->update(['thumbnail' => null]);
+
+        // Set new thumbnail
+        LuresMedia::where('id', $request->media_id)
+            ->update(['thumbnail' => 'thumbnail']);
+
+        return response()->json(['message' => 'Thumbnail updated successfully']);
     }
 }

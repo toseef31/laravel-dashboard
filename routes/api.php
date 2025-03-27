@@ -24,7 +24,7 @@ Route::post('/submit-two-factor/{signature}', [\App\Http\Controllers\TwoFactorCo
 Route::post('/resend-otp/{signature}', [\App\Http\Controllers\TwoFactorController::class, 'resendOTP']);
 
 Route::middleware('auth:sanctum')->group(function () {
-   
+
 
     # Auth Routes
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
@@ -32,8 +32,6 @@ Route::middleware('auth:sanctum')->group(function () {
     # Two-Factor Routes
     Route::post('/enable-two-factor', [\App\Http\Controllers\TwoFactorController::class, 'enableTwoFactor']);
     Route::post('/disable-two-factor', [\App\Http\Controllers\TwoFactorController::class, 'disableTwoFactor']);
-
-    
 });
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
@@ -138,46 +136,55 @@ Route::get('/penn-catalogue/{id}', [\App\Http\Controllers\PennCatalogueControlle
 Route::post('/create-book-media', [\App\Http\Controllers\BookMediaController::class, 'store']);
 Route::post('/book-media/delete', [\App\Http\Controllers\BookMediaController::class, 'deleteBookMedia']);
 Route::get('/book-media/{id}', [\App\Http\Controllers\BookMediaController::class, 'show']);
+Route::post('/book-media/set-thumbnail', [\App\Http\Controllers\BookMediaController::class, 'setThumbnail']);
 
 # Ephemera Media Routes
 Route::post('/create-ephemera-media', [\App\Http\Controllers\EphemeraMediaController::class, 'store']);
 Route::post('/ephemera-media/delete', [\App\Http\Controllers\EphemeraMediaController::class, 'deleteEphemeraMedia']);
 Route::get('/ephemera-media/{id}', [\App\Http\Controllers\EphemeraMediaController::class, 'show']);
+Route::post('/ephemera-media/set-thumbnail', [\App\Http\Controllers\EphemeraMediaController::class, 'setThumbnail']);
 
 # HardyReels Media Routes
 Route::post('/create-hardyreel-media', [\App\Http\Controllers\HardyReelMediaController::class, 'store']);
 Route::post('/hardyreel-media/delete', [\App\Http\Controllers\HardyReelMediaController::class, 'deleteHardyReelMedia']);
 Route::get('/hardyreel-media/{id}', [\App\Http\Controllers\HardyReelMediaController::class, 'show']);
+Route::post('/hardyreel-media/set-thumbnail', [\App\Http\Controllers\HardyReelMediaController::class, 'setThumbnail']);
 
 # OtherReels Media Routes
 Route::post('/create-otherreel-media', [\App\Http\Controllers\OtherReelMediaController::class, 'store']);
 Route::post('/otherreel-media/delete', [\App\Http\Controllers\OtherReelMediaController::class, 'deleteOtherReelMedia']);
 Route::get('/otherreel-media/{id}', [\App\Http\Controllers\OtherReelMediaController::class, 'show']);
+Route::post('/otherreel-media/set-thumbnail', [\App\Http\Controllers\OtherReelMediaController::class, 'setThumbnail']);
 
 # Lures Media Routes
 Route::post('/create-lures-media', [\App\Http\Controllers\LuresMediaController::class, 'store']);
 Route::post('/lures-media/delete', [\App\Http\Controllers\LuresMediaController::class, 'deleteLuresMedia']);
 Route::get('/lures-media/{id}', [\App\Http\Controllers\LuresMediaController::class, 'show']);
+Route::post('/lures-media/set-thumbnail', [\App\Http\Controllers\LuresMediaController::class, 'setThumbnail']);
 
 # Rods Media Routes
 Route::post('/create-rods-media', [\App\Http\Controllers\RodsMediaController::class, 'store']);
 Route::post('/rods-media/delete', [\App\Http\Controllers\RodsMediaController::class, 'deleteRodsMedia']);
 Route::get('/rods-media/{id}', [\App\Http\Controllers\RodsMediaController::class, 'show']);
+Route::post('/rods-media/set-thumbnail', [\App\Http\Controllers\RodsMediaController::class, 'setThumbnail']);
 
 # Rods Media Routes
 Route::post('/create-penn-catalogues-media', [\App\Http\Controllers\PennCatalogueMediaController::class, 'store']);
 Route::post('/penn-catalogues-media/delete', [\App\Http\Controllers\PennCatalogueMediaController::class, 'deletePennCatalogueMedia']);
 Route::get('/penn-catalogues-media/{id}', [\App\Http\Controllers\PennCatalogueMediaController::class, 'show']);
+Route::post('/penn-catalogues-media/set-thumbnail', [\App\Http\Controllers\PennCatalogueMediaController::class, 'setThumbnail']);
 
 # OtherTackle Media Routes
 Route::post('/create-othertackle-media', [\App\Http\Controllers\OtherTackleMediaController::class, 'store']);
 Route::post('/othertackle-media/delete', [\App\Http\Controllers\OtherTackleMediaController::class, 'deleteOtherTackleMedia']);
 Route::get('/othertackle-media/{id}', [\App\Http\Controllers\OtherTackleMediaController::class, 'show']);
+Route::post('/othertackle-media/set-thumbnail', [\App\Http\Controllers\OtherTackleMediaController::class, 'setThumbnail']);
 
 # OtherTackle Media Routes
 Route::post('/create-inusetackle-media', [\App\Http\Controllers\InUseTackleMediaController::class, 'store']);
 Route::post('/inusetackle-media/delete', [\App\Http\Controllers\InUseTackleMediaController::class, 'deleteInUseTackleMedia']);
 Route::get('/inusetackle-media/{id}', [\App\Http\Controllers\InUseTackleMediaController::class, 'show']);
+Route::post('/inusetackle-media/set-thumbnail', [\App\Http\Controllers\InUseTackleMediaController::class, 'setThumbnail']);
 
 
 
@@ -196,4 +203,3 @@ Route::get('/old-penn-store', [\App\Http\Controllers\Data\LuresRodsPennControlle
 Route::get('/old-lures-media-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'insertMediaLures']);
 Route::get('/old-rods-media-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'insertMediaRods']);
 Route::get('/old-penn-media-store', [\App\Http\Controllers\Data\LuresRodsPennController::class, 'insertMediaPenn']);
-

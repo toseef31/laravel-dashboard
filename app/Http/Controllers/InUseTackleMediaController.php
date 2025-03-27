@@ -15,25 +15,25 @@ class InUseTackleMediaController extends Controller
                 'media_file' => 'required', # Accepts either a file or an array of files
                 'media_file.*' => 'file|mimes:jpg,jpeg,png,gif|max:2048', # Validation for each file
             ]);
-    
+
             $files = $request->file('media_file');
-    
+
             # Check if it's an array of files or a single file
             if (!is_array($files)) {
                 $files = [$files]; # Convert single file to an array for uniform processing
             }
-    
+
             $uploadedFiles = [];
-    
+
             foreach ($files as $file) {
-                $fileName = $this->cleanString(time() . '_' . $file->getClientOriginalName()).'.'.$file->getClientOriginalExtension();
+                $fileName = $this->cleanString(time() . '_' . $file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
                 $filePath = $file->storeAs('uploads/in_use_tackles', $fileName, 'public');
-    
+
                 $tacklesMedia = new InUseTackleMedia();
                 $tacklesMedia->tackle_id = $validatedData['tackle_id'];
                 $tacklesMedia->media_path = $filePath;
                 $tacklesMedia->save();
-    
+
                 $uploadedFiles[] = [
                     'id' => $tacklesMedia->id,
                     'tackle_id' => $tacklesMedia->tackle_id,
@@ -42,7 +42,7 @@ class InUseTackleMediaController extends Controller
                     'created_at' => $tacklesMedia->created_at,
                 ];
             }
-    
+
             return $this->sendResponse('File(s) uploaded successfully.', $uploadedFiles, 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to add file(s)', $e->getMessage(), 500);
@@ -54,21 +54,21 @@ class InUseTackleMediaController extends Controller
             $validatedData = $request->validate([
                 'id' => 'required|integer',
             ]);
-    
+
             $tacklesMedia = InUseTackleMedia::find($validatedData['id']);
-    
+
             if (!$tacklesMedia) {
                 return $this->sendError('File not found', 'The file you are trying to delete does not exist.', 404);
             }
-    
+
             $tacklesMedia->delete();
-    
+
             return $this->sendResponse('File deleted successfully.', [], 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to delete file', $e->getMessage(), 500);
         }
     }
-    
+
     public function show($id)
     {
         try {
@@ -81,5 +81,23 @@ class InUseTackleMediaController extends Controller
         } catch (\Exception $e) {
             return $this->sendError('Failed to fetch file', $e->getMessage(), 500);
         }
+    }
+
+    public function setThumbnail(Request $request)
+    {
+        $request->validate([
+            'tackle_id' => 'required|integer|exists:in_use_tackles,id',
+            'media_id' => 'required|integer|exists:in_use_tackle_media,id',
+        ]);
+
+        // Reset any existing thumbnail for this book
+        InUseTackleMedia::where('tackle_id', $request->tackle_id)
+            ->update(['thumbnail' => null]);
+
+        // Set new thumbnail
+        InUseTackleMedia::where('id', $request->media_id)
+            ->update(['thumbnail' => 'thumbnail']);
+
+        return response()->json(['message' => 'Thumbnail updated successfully']);
     }
 }

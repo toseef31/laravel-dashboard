@@ -12,10 +12,11 @@ class BookController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'book_id' => 'required|string|max:255',
                 'title' => 'required|string|max:255',
                 'author' => 'required|string|max:255',
                 'description' => 'required|string',
-                'pages' => 'required|integer|min:0',
+                // 'pages' => 'required|integer|min:0',
                 'size' => 'nullable|integer|min:0',
                 'edition' => 'nullable|string|max:255',
                 'publisher' => 'nullable|string|max:255',
@@ -35,7 +36,6 @@ class BookController extends Controller
 
             $book = Book::create($validatedData);
             return $this->sendResponse('Book Created Successfully', $book, 201);
-
         } catch (\Exception $e) {
             return $this->sendError('Failed to create book', $e->getMessage(), 500);
         }
@@ -46,34 +46,33 @@ class BookController extends Controller
             $perPage = $request->input('per_page', 25);
             $query = Book::query();
             $query->orderBy('id', 'desc');
-    
+
             if ($request->has('book_id')) {
                 $query->where('book_id', $request->input('book_id'));
             }
-    
+
             if ($request->has('title')) {
                 $query->where('title', 'LIKE', '%' . $request->input('title') . '%');
             }
-    
+
             if ($request->has('publisher')) {
                 $query->where('publisher', 'LIKE', '%' . $request->input('publisher') . '%');
             }
-    
+
             if ($request->has('author')) {
                 $query->where('author', 'LIKE', '%' . $request->input('author') . '%');
             }
-    
+
             if ($request->has('publication_year')) {
                 $query->where('publication_year', $request->input('publication_year'));
             }
-    
+
             if ($request->has('edition')) {
                 $query->where('edition', 'LIKE', '%' . $request->input('edition') . '%');
             }
             $query->with('bookMedia', 'bookSize');
             $books = $query->paginate($perPage);
             return $this->sendPaginatedResponse($books, 200);
-    
         } catch (\Exception $e) {
             return $this->sendError('Failed to fetch books', $e->getMessage(), 500);
         }
@@ -82,10 +81,10 @@ class BookController extends Controller
     {
         try {
             $book = Book::find($request->id);
-            if($book){
+            if ($book) {
                 $book->delete();
                 return $this->sendResponse('Book deleted successfully', null, 200);
-            }else{
+            } else {
                 return $this->sendError('Book not found', null, 404);
             }
         } catch (\Exception $e) {
@@ -99,17 +98,17 @@ class BookController extends Controller
                 'title' => 'required|string|max:255',
                 'id' => 'required|integer|min:0',
             ]);
-    
-            if ($request->has('book_id')) {
-                return $this->sendError('Validation Error, Book ID cannot be edited', null, 422);
-            }
-    
+
+            // if ($request->has('book_id')) {
+            //     return $this->sendError('Validation Error, Book ID cannot be edited', null, 422);
+            // }
+
             $book = Book::find($request->id);
-    
+
             if ($book) {
                 $updateData = $request->except('id');
                 $book->update($updateData);
-    
+
                 return $this->sendResponse('Book updated successfully', $book, 200);
             } else {
                 return $this->sendError('Book not found', null, 404);
@@ -118,25 +117,26 @@ class BookController extends Controller
             return $this->sendError('Failed to update book', $e->getMessage(), 500);
         }
     }
-    public function show(Request $request){
+    public function show(Request $request)
+    {
         try {
             $book = Book::with('bookMedia')->find($request->id);
-            if($book){
+            if ($book) {
                 return $this->sendResponse('Book fetched successfully', $book, 200);
-            }else{
+            } else {
                 return $this->sendError('Book not found', null, 404);
             }
         } catch (\Exception $e) {
             return $this->sendError('Failed to fetch book', $e->getMessage(), 500);
         }
     }
-    
+
     public function duplicateBook($id)
     {
         try {
             # Find the book by ID
             $book = Book::with('bookMedia')->find($id); // Include the related media
-    
+
             if ($book) {
                 # Duplicate the book
                 $newBook = $book->replicate();
@@ -145,14 +145,14 @@ class BookController extends Controller
                 $newBook->comment = '';
                 $newBook->add_date = '';
                 $newBook->save();
-    
+
                 # Duplicate associated media
-                foreach ($book->bookMedia as $media) {
-                    $newMedia = $media->replicate();
-                    $newMedia->book_id = $newBook->id; // Associate with the new book
-                    $newMedia->save();
-                }
-    
+                // foreach ($book->bookMedia as $media) {
+                //     $newMedia = $media->replicate();
+                //     $newMedia->book_id = $newBook->id; // Associate with the new book
+                //     $newMedia->save();
+                // }
+
                 return $this->sendResponse('Book and its media duplicated successfully, new book ID: ' . $newBook->book_id, $newBook, 200);
             } else {
                 return $this->sendError('Book not found', null, 404);
@@ -161,7 +161,8 @@ class BookController extends Controller
             return $this->sendError('Failed to duplicate book and media', $e->getMessage(), 500);
         }
     }
-    public function compareBooks(Request $request){
+    public function compareBooks(Request $request)
+    {
         try {
             $request->validate([
                 'book_ids' => 'required|array',
@@ -188,11 +189,10 @@ class BookController extends Controller
 
             // Generate the next book_id with 'B' prefix and 5 digits, padded with zeros
             $nextBookId = 'B' . str_pad($nextIdToUse, 5, '0', STR_PAD_LEFT);
-            
+
             return $this->sendResponse('Next book ID fetched successfully', ['book_id' => $nextBookId], 200);
         } catch (\Exception $e) {
             return $this->sendError('Failed to fetch next book ID', $e->getMessage(), 500);
         }
     }
-    
 }

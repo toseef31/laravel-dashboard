@@ -38,24 +38,24 @@ class Book extends Model
      *
      * @return void
      */
-    protected static function booted()
-    {
-        static::creating(function ($book) {
-            // Get the next auto-increment value for the books table
-            $nextId = DB::select("SHOW TABLE STATUS LIKE 'books'");
-            $nextAutoIncrementId = $nextId[0]->Auto_increment;
-    
-            // Get the maximum value of the book_id column (ignoring the 'B' prefix)
-            $maxBookId = self::max(DB::raw("CAST(SUBSTRING(book_id, 2) AS UNSIGNED)"));
-    
-            // Determine the next ID to use, ensuring it's greater than both auto-increment and the highest book_id
-            $nextIdToUse = max($nextAutoIncrementId, $maxBookId + 1);
-    
-            // Format the book_id with the 'B' prefix and leading zeros
-            $book->book_id = 'B' . str_pad($nextIdToUse, 5, '0', STR_PAD_LEFT);
-        });
-    }
-    
+    // protected static function booted()
+    // {
+    //     static::creating(function ($book) {
+    //         // Get the next auto-increment value for the books table
+    //         $nextId = DB::select("SHOW TABLE STATUS LIKE 'books'");
+    //         $nextAutoIncrementId = $nextId[0]->Auto_increment;
+
+    //         // Get the maximum value of the book_id column (ignoring the 'B' prefix)
+    //         $maxBookId = self::max(DB::raw("CAST(SUBSTRING(book_id, 2) AS UNSIGNED)"));
+
+    //         // Determine the next ID to use, ensuring it's greater than both auto-increment and the highest book_id
+    //         $nextIdToUse = max($nextAutoIncrementId, $maxBookId + 1);
+
+    //         // Format the book_id with the 'B' prefix and leading zeros
+    //         $book->book_id = 'B' . str_pad($nextIdToUse, 5, '0', STR_PAD_LEFT);
+    //     });
+    // }
+
 
 
     public function bookMedia()
