@@ -20,7 +20,10 @@ class EphemeraController extends Controller
             }
 
             if ($request->has('type')) {
-                $query->where('type', 'LIKE', '%' . $request->input('type') . '%');
+                // $query->where('type', 'LIKE', '%' . $request->input('type') . '%');
+                $query->whereHas('ephemeraType', function ($q) use ($request) {
+                    $q->where('type', 'LIKE', '%' . $request->input('type') . '%');
+                });
             }
 
             if ($request->has('details')) {

@@ -107,6 +107,10 @@ class BookController extends Controller
 
             if ($book) {
                 $updateData = $request->except('id');
+                // return ($updateData);
+                if (!isset($updateData['status']) || $updateData['status'] === null) {
+                    $updateData['status'] = 'Collection';
+                }
                 $book->update($updateData);
 
                 return $this->sendResponse('Book updated successfully', $book, 200);
@@ -144,6 +148,13 @@ class BookController extends Controller
                 $newBook->jacket_condition = '';
                 $newBook->comment = '';
                 $newBook->add_date = '';
+                $newBook->cost_price = null;
+                $newBook->valuation = null;
+                $response = $this->getNextBookId();
+
+                $data = $response->getData();
+                $newBook->book_id = $data->data->book_id ?? null;
+                
                 $newBook->save();
 
                 # Duplicate associated media

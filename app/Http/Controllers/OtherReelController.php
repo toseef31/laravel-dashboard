@@ -19,12 +19,12 @@ class OtherReelController extends Controller
                 $query->where('reel_id', $request->input('reel_id'));
             }
     
-            if ($request->has('type')) {
-                $query->where('type', 'LIKE', '%' . $request->input('type') . '%');
+            if ($request->has('makers_name')) {
+                $query->where('makers_name', 'LIKE', '%' . $request->input('makers_name') . '%');
             }
 
-            if ($request->has('details')) {
-                $query->where('details', 'LIKE', '%' . $request->input('details') . '%');
+            if ($request->has('model')) {
+                $query->where('model', 'LIKE', '%' . $request->input('model') . '%');
             }
     
             if ($request->has('size')) {
@@ -35,8 +35,8 @@ class OtherReelController extends Controller
                 $query->where('cost_price', 'LIKE', '%' . $request->input('cost_price') . '%');
             }
 
-            if ($request->has('condition')) {
-                $query->where('condition', 'LIKE', '%' . $request->input('condition') . '%');
+            if ($request->has('sub_model')) {
+                $query->where('sub_model', 'LIKE', '%' . $request->input('sub_model') . '%');
             }
     
             $query->with('reelMedia');

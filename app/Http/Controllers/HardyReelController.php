@@ -18,9 +18,13 @@ class HardyReelController extends Controller
             if ($request->has('reel_id')) {
                 $query->where('reel_id', $request->input('reel_id'));
             }
-    
-            if ($request->has('type')) {
-                $query->where('type', 'LIKE', '%' . $request->input('type') . '%');
+            
+            if ($request->has('model')) {
+                $query->where('model', 'LIKE', '%' . $request->input('model') . '%');
+            }
+
+            if ($request->has('sub_model')) {
+                $query->where('sub_model', 'LIKE', '%' . $request->input('sub_model') . '%');
             }
 
             if ($request->has('details')) {
